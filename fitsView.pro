@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = Profiterole
+TARGET = ProFITerole
 DEPENDPATH += .
 INCLUDEPATH += .
 
