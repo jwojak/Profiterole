@@ -30,14 +30,12 @@ QLabel* CVImageWidget::getLabel()
        cv::Mat rgb;
        QPixmap p;
 
-       cv::Mat temp_mat;
-       double min, max;
-       cv::minMaxLoc(_mat, &min, &max);
-       std::cout<<"---------------------------------------------------------"<<std::endl;
-       std::cout<< " min = "<<min<<" |||||||||||| "<<" max = "<<max<<std::endl;   
-       std::cout<<"---------------------------------------------------------"<<std::endl;
-       _mat.convertTo(temp_mat,CV_8U,255.0/(max-min),-min);
-       cvtColor(temp_mat, rgb, CV_GRAY2RGB);
+      
+      
+      
+       rescaleImageDynamiq(0.0,0.0);
+      
+       cvtColor(_matToDisplay, rgb, CV_GRAY2RGB);
 
        p.convertFromImage(QImage(rgb.data, rgb.cols, rgb.rows,rgb.cols*3, QImage::Format_RGB888));
 
@@ -59,4 +57,15 @@ CVImageWidget CVImageWidget::operator=(cv::Mat m)
 }
 
 
+
+void CVImageWidget::rescaleImageDynamiq(double a, double b)
+ {  
+   double min, max;
+   cv::minMaxLoc(_mat, &min, &max);
+   std::cout<<"min = "<< min <<" max = "<<max<< std::endl;
+   std::cout<<"a = "<< a << " b = " << b << std::endl;
+     
+   _mat.convertTo(_matToDisplay,CV_8U,255.0/(max-min+a),-min+b);
+   std::cout<<"Super Super Toto"<<std::endl;
+ } 
 

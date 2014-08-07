@@ -21,12 +21,15 @@ class CVImageWidget : public QWidget
    
    private:
    cv::Mat _mat;
+   cv::Mat _matToDisplay;
    QLabel* _label;
    void setLabel();
+   
 
       signals:
 public slots:
-    
+   void rescaleImageDynamiq(double a, double b);//should be private ?
+   
  
 };
 

@@ -11,7 +11,7 @@ fondaWin::fondaWin() : QWidget()
   
  
   imageWidget = new CVImageWidget(this);
-  scrollArea = new QScrollArea(this);
+  scrollArea = new imageScrollArea(this);
   headerTable = new  QTableWidget(this);
   scrollArea->move(280,40);
   headerTable->move(0,40);
@@ -29,6 +29,12 @@ fondaWin::fondaWin() : QWidget()
   QAction *houghCircleAct = new QAction("Hough Circles",this);
   QAction *openAct = new QAction("Open...", this);
   QAction *helpAct = new QAction("Hi buddies !! this is ds10 ;)",this); 
+
+
+ 
+ 
+
+  connect(scrollArea, SIGNAL(rescaleImageDynamiqSig(double, double)),imageWidget, SLOT(rescaleImageDynamiq(double, double)));
 
   helpMenu->addAction(helpAct);
   fileMenu->addAction(openAct);
@@ -114,7 +120,7 @@ void fondaWin::showFilteredImage()
   imageWidget->setMat(*matriceImageFiltered);
 }
 
-void fondaWin::showOrigImage()
+ void fondaWin::showOrigImage()
 {
   imageWidget->setMat(*matriceImage);
 }

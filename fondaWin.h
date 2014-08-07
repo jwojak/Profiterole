@@ -13,8 +13,9 @@
 #include <QString>
 #include <QFileDialog>
 #include <QLineEdit>
-#include <QScrollArea>
+//#include <QScrollArea>
 #include <QTableWidget>
+
 
 //include opencv
 #include <opencv2/core/core.hpp>
@@ -24,6 +25,7 @@
 
 //mes includes
 #include <cvimagewidget.h>
+#include <imageScrollArea.h>
 
 class fondaWin : public QWidget
 {
@@ -42,6 +44,7 @@ class fondaWin : public QWidget
     void sobelFilter();
     void gaussianFilter();
     void houghFilter();
+    
 
  signals:
     void fileNameChanged();
