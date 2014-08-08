@@ -13,17 +13,12 @@
 #include <string.h>
 #include "fondaWin.h"
 
+
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-   
-    
-  
-    
-    
- 
-    
-  
+
     fondaWin mainWindow;
   
     mainWindow.show();

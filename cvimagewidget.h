@@ -5,8 +5,9 @@
 #include <QLabel>
 #include <QImage>
 #include <QScrollArea>
+#include <QColor>
 #include <opencv2/opencv.hpp>
-
+#include <math.h>
 class CVImageWidget : public QWidget
 {
    Q_OBJECT
@@ -24,7 +25,7 @@ class CVImageWidget : public QWidget
    cv::Mat _matToDisplay;
    QLabel* _label;
    void setLabel();
-   
+  
 
       signals:
 public slots:
