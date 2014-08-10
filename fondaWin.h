@@ -15,7 +15,7 @@
 #include <QLineEdit>
 //#include <QScrollArea>
 #include <QTableWidget>
-
+#include <QSignalMapper>
 
 //include opencv
 #include <opencv2/core/core.hpp>

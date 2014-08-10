@@ -20,16 +20,24 @@ fondaWin::fondaWin() : QWidget()
   QMenuBar *mainMenu = new QMenuBar( this );
   QMenu *fileMenu = mainMenu->addMenu("File");
   QMenu *imageMenu = mainMenu->addMenu("Image");
+  QMenu *colorMapMenu = mainMenu->addMenu("ColorMap");
   QMenu *helpMenu = mainMenu->addMenu("Help");
+  // IMAGE MENU ACTIONS !!
   QAction *backToOrigImageAct = new QAction("Show Original Image", this);
   QAction *gaussianFilterAct = new QAction("Gaussian Filter", this);
   QAction *medianFilterAct = new QAction("Median Filter", this);
   QAction *sobelFilterAct = new QAction("Sobel Filter", this);
   QAction *cannyEdgesAct = new QAction("Canny Edges", this);
   QAction *houghCircleAct = new QAction("Hough Circles",this);
+  // FILE MENU ACTIONS !!
   QAction *openAct = new QAction("Open...", this);
-  QAction *helpAct = new QAction("Hi buddies !! this is ds10 ;)",this); 
-
+  // HELP MENU ACTIONS !!
+  QAction *helpAct = new QAction("Hi buddies !! this is ds10 ;)",this);
+  // COLORMAP MENU ACTIONS !!
+  QAction *linearGrayAct = new QAction("Linear Gray",this);
+  QAction *cubeHelixAct = new QAction("CubeHelix", this);
+  QAction *jetAct = new QAction("Jet", this);
+  QAction *roulletAct = new QAction("Roullet", this);
 
  
  
@@ -59,7 +67,25 @@ fondaWin::fondaWin() : QWidget()
   
   imageMenu->addAction(houghCircleAct);
   connect(houghCircleAct, SIGNAL(triggered()), this, SLOT(houghFilter()));
+ 
+  colorMapMenu->addAction(linearGrayAct);
+  colorMapMenu->addAction(cubeHelixAct);
+  colorMapMenu->addAction(jetAct);
+  colorMapMenu->addAction(roulletAct);
+
+  QSignalMapper* signalMapper = new QSignalMapper(this);
   
+  connect(linearGrayAct, SIGNAL(triggered()), signalMapper, SLOT(map()));
+  connect(cubeHelixAct, SIGNAL(triggered()), signalMapper, SLOT(map()));
+  connect(jetAct, SIGNAL(triggered()), signalMapper, SLOT(map()));
+  connect(roulletAct, SIGNAL(triggered()), signalMapper, SLOT(map()));
+
+  signalMapper->setMapping(linearGrayAct, 2);
+  signalMapper->setMapping(cubeHelixAct, 3);
+  signalMapper->setMapping(jetAct,4);
+  signalMapper->setMapping(roulletAct,5);
+  
+  connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
   
 }
 
