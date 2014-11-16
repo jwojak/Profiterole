@@ -25,6 +25,10 @@ QMAKE_LIBDIR += /home/julien/MESLIBS/cfitsio/lib64
 # Input
 HEADERS += cvimagewidget.h
 HEADERS += fondaWin.h
+HEADERS += imageScrollArea.h
+HEADERS += qcustomplot.h
 SOURCES += fitsView.cpp
 SOURCES += fondaWin.cpp
 SOURCES += cvimagewidget.cpp
+SOURCES += imageScrollArea.cpp
+SOURCES += qcustomplot.cpp

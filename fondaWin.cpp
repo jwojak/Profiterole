@@ -16,6 +16,11 @@ fondaWin::fondaWin() : QWidget()
   scrollArea->move(280,40);
   headerTable->move(0,40);
   scrollArea->resize(dw.width()*0.5,dw.height()*0.5);
+  customPlot = new QCustomPlot(this);
+  customPlot->move(5,240);
+  customPlot->resize(247,247);
+  imageStatTable = new QTableWidget(this);
+  imageStatTable->move(5, 500);
 
   QMenuBar *mainMenu = new QMenuBar( this );
   QMenu *fileMenu = mainMenu->addMenu("File");
@@ -87,6 +92,9 @@ fondaWin::fondaWin() : QWidget()
   
   connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
   
+  
+
+
 }
 
 void fondaWin::gaussianFilter()
@@ -195,8 +203,55 @@ void fondaWin::loadImage()
 	  }	
 	
       }
-
+    // TEST POUR UN HISTOGRAMMe!!
+    double maxIm = 0;
+    cv::minMaxLoc(*matriceImage, 0, &maxIm, 0, 0);
+    int histSize = maxIm;
+    
+    float range[] = {0,histSize};
+    const float* histRange = {range};
+    bool uniform = true; bool accumulate = false;
+    cv::Mat im_hist;
+    cv::calcHist(matriceImage, 1, 0, cv::Mat(), im_hist, 1, &histSize, &histRange, uniform, accumulate );
+    std::cout<<"histogramme calcule!"<<std::endl;
+    // FIN TEST POUR UN HISTOGRAMMe !!
+    double maxVal = 1;
+    cv::minMaxLoc(im_hist, 0, &maxVal, 0, 0);
+    // generate some data:
+    QVector<double> x(histSize), y(histSize); // initialize with entries 0..100
+    for (int i=0; i<histSize; ++i)
+      {
+	x[i] = i; // x goes from -1 to 1
+	y[i] = (im_hist.at<float>(i))/maxVal; // let's plot a quadratic function
+	
+      }
+    // create graph and assign data to it:
    
+    // TODO NE SURTOUT PAS LAISSER CES VALEURS EN DUR !!! C EST JUSTE POUR UN TEST  DE GRAPHIC !!
+   
+    customPlot->addGraph();
+    customPlot->graph(0)->setData(x, y);
+    // give the axes some labels:
+    customPlot->xAxis->setLabel("x");
+    customPlot->yAxis->setLabel("y");
+    // set axes ranges, so we see all data:
+    customPlot->xAxis->setRange(0, histSize);
+    customPlot->yAxis->setRange(0, 1);
+    customPlot->replot();
+    
+    imageStatTable->setRowCount(2);
+    imageStatTable->setColumnCount(2);
+   
+    QTableWidgetItem *maxItem = new QTableWidgetItem();
+    imageStatTable->setItem(0,0,maxItem);
+    maxItem->setText("max");
+    
+    QTableWidgetItem *minItem = new QTableWidgetItem();
+    imageStatTable->setItem(1,0,minItem);
+    minItem->setText("min");
+
+
+
     QDesktopWidget dw;
     imageWidget->setMat(*matriceImage);
     // imageWidget->move(280,40);
@@ -335,7 +390,7 @@ void fondaWin::loadImage()
       }						 
 						 
       
-      std::cout<<"value tentative = " <<ss.str() << std::endl;
+      //std::cout<<"value tentative = " <<ss.str() << std::endl;
       QTableWidgetItem *currentItem = new QTableWidgetItem();
       headerTable->setItem(cpt,0,currentItem);
       currentItem->setText((it->first).c_str());

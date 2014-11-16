@@ -26,6 +26,7 @@
 //mes includes
 #include <cvimagewidget.h>
 #include <imageScrollArea.h>
+#include <qcustomplot.h>
 //#include <type_traits>  // pour le prochain upgrade en c++11
 
 enum  colorTableLUT {linear_gray, cubehelix}; // on ne met que un enum ... a upgrader en C++11 pour les prochaines versions
@@ -60,7 +61,9 @@ class fondaWin : public QWidget
     CVImageWidget* imageWidget;
     QScrollArea* scrollArea;
     QTableWidget *headerTable;
-  
+    QCustomPlot *customPlot;
+    QTableWidget *imageStatTable;
+
 };
 
 
