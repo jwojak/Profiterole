@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     fondaWin mainWindow;
-  
+    mainWindow.setWindowIcon(QIcon("image.png"));
     mainWindow.show();
     return app.exec();
 }
