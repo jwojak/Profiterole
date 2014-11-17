@@ -193,16 +193,17 @@ void fondaWin::loadImage()
     }
 
     this->matriceImageFiltered = new cv::Mat(ax2,  ax1, CV_8U);
-
+    std::vector<float> vectImage;
     for (int j = 0; j<ax2; ++j)
       {
 	for(int k=0; k<ax1 ; ++k)
 	  {
 	    this->matriceImage->at<float>(ax2-1-j,k) = contents[k+j*ax1];
-	    
+	    vectImage.push_back(contents[k+j*ax1]);
 	  }	
 	
       }
+    std::sort (vectImage.begin(),vectImage.end());
     // TEST POUR UN HISTOGRAMMe!!
     double maxIm = 0;
     double minIm = 0;
@@ -212,7 +213,7 @@ void fondaWin::loadImage()
     cv::Mat stdDevIm0; 
     cv::meanStdDev(*matriceImage, meanIm0, stdDevIm0);
     int histSize = maxIm;
-    imageStatTable->setRowCount(4);
+    imageStatTable->setRowCount(5);
     imageStatTable->setColumnCount(2);
     QTableWidgetItem *maxItem = new QTableWidgetItem();
     imageStatTable->setItem(0,0,maxItem);
@@ -242,6 +243,14 @@ void fondaWin::loadImage()
     QTableWidgetItem *stdDevItemValue = new QTableWidgetItem();
     imageStatTable->setItem(3,1,stdDevItemValue);
     stdDevItemValue->setText(QString::number(stdDevIm0.at<double>(0,0)));
+
+    QTableWidgetItem *medianItem = new QTableWidgetItem();
+    imageStatTable->setItem(4,0,medianItem);
+    medianItem->setText("median");
+    QTableWidgetItem *medianItemValue = new QTableWidgetItem();
+    imageStatTable->setItem(4,1,medianItemValue);
+    medianItemValue->setText(QString::number(vectImage[vectImage.size()/2]));
+
 
 
     
