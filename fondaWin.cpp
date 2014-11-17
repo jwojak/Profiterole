@@ -205,9 +205,47 @@ void fondaWin::loadImage()
       }
     // TEST POUR UN HISTOGRAMMe!!
     double maxIm = 0;
-    cv::minMaxLoc(*matriceImage, 0, &maxIm, 0, 0);
+    double minIm = 0;
+    cv::minMaxLoc(*matriceImage, &minIm, &maxIm, 0, 0);
+   
+    cv::Mat meanIm0;
+    cv::Mat stdDevIm0; 
+    cv::meanStdDev(*matriceImage, meanIm0, stdDevIm0);
     int histSize = maxIm;
+    imageStatTable->setRowCount(4);
+    imageStatTable->setColumnCount(2);
+    QTableWidgetItem *maxItem = new QTableWidgetItem();
+    imageStatTable->setItem(0,0,maxItem);
+    maxItem->setText("max");
+    QTableWidgetItem *maxItemValue = new QTableWidgetItem();
+    imageStatTable->setItem(0,1,maxItemValue);
+    maxItemValue->setText(QString::number(maxIm));
     
+          
+    QTableWidgetItem *minItem = new QTableWidgetItem();
+    imageStatTable->setItem(1,0,minItem);
+    minItem->setText("min");
+    QTableWidgetItem *minItemValue = new QTableWidgetItem();
+    imageStatTable->setItem(1,1,minItemValue);
+    minItemValue->setText(QString::number(minIm));
+
+    QTableWidgetItem *meanItem = new QTableWidgetItem();
+    imageStatTable->setItem(2,0,meanItem);
+    meanItem->setText("mean");
+    QTableWidgetItem *meanItemValue = new QTableWidgetItem();
+    imageStatTable->setItem(2,1,meanItemValue);
+    meanItemValue->setText(QString::number(meanIm0.at<double>(0,0)));
+
+    QTableWidgetItem *stdDevItem = new QTableWidgetItem();
+    imageStatTable->setItem(3,0,stdDevItem);
+    stdDevItem->setText("stdDev");
+    QTableWidgetItem *stdDevItemValue = new QTableWidgetItem();
+    imageStatTable->setItem(3,1,stdDevItemValue);
+    stdDevItemValue->setText(QString::number(stdDevIm0.at<double>(0,0)));
+
+
+    
+
     float range[] = {0,histSize};
     const float* histRange = {range};
     bool uniform = true; bool accumulate = false;
@@ -238,21 +276,7 @@ void fondaWin::loadImage()
     customPlot->xAxis->setRange(0, histSize);
     customPlot->yAxis->setRange(0, 1);
     customPlot->replot();
-    
-    imageStatTable->setRowCount(2);
-    imageStatTable->setColumnCount(2);
-   
-    QTableWidgetItem *maxItem = new QTableWidgetItem();
-    imageStatTable->setItem(0,0,maxItem);
-    maxItem->setText("max");
-    
-    QTableWidgetItem *minItem = new QTableWidgetItem();
-    imageStatTable->setItem(1,0,minItem);
-    minItem->setText("min");
-
-
-
-    QDesktopWidget dw;
+      
     imageWidget->setMat(*matriceImage);
     // imageWidget->move(280,40);
     //scrollArea = new QScrollArea(this);
