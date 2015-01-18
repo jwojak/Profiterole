@@ -5,6 +5,7 @@
    _label = new QLabel(this);
    setLabel();
    setColorMap(2);
+   this->setMouseTracking(true);
  }
 
 
@@ -13,12 +14,14 @@ CVImageWidget::CVImageWidget(QWidget *parent) : QWidget(parent)
   _label = new QLabel(this);
   setLabel();
   setColorMap(2);
+  
 }
 
  void CVImageWidget::setMat(const cv::Mat &newMat)
  {
    _mat = newMat;
    setLabel();
+  
  }
 
 QLabel* CVImageWidget::getLabel()
@@ -33,6 +36,7 @@ QLabel* CVImageWidget::getLabel()
        rescaleImageDynamiq(0.0,0.0);
        //resize(p.size());
      }
+   this->setMouseTracking(true);
  }
 
 cv::Mat CVImageWidget::getMat()
@@ -44,8 +48,6 @@ CVImageWidget CVImageWidget::operator=(cv::Mat m)
 {
   _mat = m;
 }
-
-
 
 void CVImageWidget::rescaleImageDynamiq(double a, double b)
  {  

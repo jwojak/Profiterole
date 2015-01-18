@@ -6,27 +6,54 @@
 fondaWin::fondaWin() : QWidget()
 {
   QDesktopWidget dw;
+  QGridLayout *grille = new QGridLayout(this);
+ 
   resize(dw.width()*0.7,dw.height()*0.7);
   std::cout<<this<<std::endl;
-  
+  imManager = imagesManager::getInstance();
  
   imageWidget = new CVImageWidget(this);
   scrollArea = new imageScrollArea(this);
   headerTable = new  QTableWidget(this);
-  scrollArea->move(280,40);
-  headerTable->move(0,40);
-  scrollArea->resize(dw.width()*0.5,dw.height()*0.5);
+  imageManagerSelector = new imageListSelector(this);
+  scrollArea->setMouseTracking(true);
+  
+  
+  cursorInfoText = new coordDisplayer(this);
+  //cursorInfoText->move(5,240);
+  //cursorInfoText->resize(260,30);
+  grille->addWidget(headerTable, 0,0,2,1);
+  grille->addWidget(scrollArea,0,1,6,6);
+  grille->addWidget(cursorInfoText,1,7);
+  grille->setColumnStretch(0,0);
+  grille->setColumnStretch(1,0);
+  grille->setColumnStretch(2,2);
+  grille->setColumnStretch(7,1);
+  
+
   customPlot = new QCustomPlot(this);
-  customPlot->move(5,240);
-  customPlot->resize(247,247);
+  grille->addWidget(customPlot,2,0,2,1);
+  //customPlot->move(5,280);
+  //customPlot->resize(247,247);
   imageStatTable = new QTableWidget(this);
-  imageStatTable->move(5, 500);
+  grille->addWidget(imageStatTable,4,0,2,1);
+  grille->addWidget(imageManagerSelector,0,7);
+  //imageStatTable->move(0, 540);
+  //imageManagerSelector->move(0,940); 
+  
+  //imageManagerSelector->setVisible(true);//show();
+  //imageManagerSelector->resize(200,200);
+  //imageManagerList->move(5,280+247+10);
+  //QAbstractButton boutonTest0 = new QAbstractButton();
+  //QAbstractButton boutonTest1 = b
+  //imageManagerList->addButton (  )
 
   QMenuBar *mainMenu = new QMenuBar( this );
   QMenu *fileMenu = mainMenu->addMenu("File");
   QMenu *imageMenu = mainMenu->addMenu("Image");
   QMenu *colorMapMenu = mainMenu->addMenu("ColorMap");
   QMenu *helpMenu = mainMenu->addMenu("Help");
+  grille->setMenuBar(mainMenu);
   // IMAGE MENU ACTIONS !!
   QAction *backToOrigImageAct = new QAction("Show Original Image", this);
   QAction *gaussianFilterAct = new QAction("Gaussian Filter", this);
@@ -44,10 +71,11 @@ fondaWin::fondaWin() : QWidget()
   QAction *jetAct = new QAction("Jet", this);
   QAction *roulletAct = new QAction("Roullet", this);
 
- 
- 
+  imageFilters* ImageFilters = new imageFilters();
 
-  connect(scrollArea, SIGNAL(rescaleImageDynamiqSig(double, double)),imageWidget, SLOT(rescaleImageDynamiq(double, double)));
+  connect(scrollArea, SIGNAL(rescaleImageDynamiqSig(double, double)), imageWidget, SLOT(rescaleImageDynamiq(double, double)));
+ 
+  connect(scrollArea, SIGNAL(displayFlyingPosInImageSig(int, int)), cursorInfoText, SLOT(displayFlyingPosInImage(int, int)));
 
   helpMenu->addAction(helpAct);
   fileMenu->addAction(openAct);
@@ -58,21 +86,22 @@ fondaWin::fondaWin() : QWidget()
   connect(backToOrigImageAct,SIGNAL(triggered()), this, SLOT(showOrigImage()));
   
   imageMenu->addAction(gaussianFilterAct);
-  connect(gaussianFilterAct, SIGNAL(triggered()), this, SLOT(gaussianFilter()));
-
+  connect(gaussianFilterAct, SIGNAL(triggered()), ImageFilters, SLOT(gaussianFilter()));
+ 
   imageMenu->addAction(medianFilterAct);
-  connect(medianFilterAct, SIGNAL(triggered()), this, SLOT(medianFilter()));
-  connect(this, SIGNAL(toggleToFilteredImage()), this, SLOT(showFilteredImage()));
-
+  connect(medianFilterAct, SIGNAL(triggered()), ImageFilters, SLOT(medianFilter()));
+  
   imageMenu->addAction(sobelFilterAct);
-  connect(sobelFilterAct, SIGNAL(triggered()), this, SLOT(sobelFilter()));
+  connect(sobelFilterAct, SIGNAL(triggered()), ImageFilters, SLOT(sobelFilter()));
 
   imageMenu->addAction(cannyEdgesAct);
-  connect(cannyEdgesAct, SIGNAL(triggered()), this, SLOT(cannyFilter()));
+  connect(cannyEdgesAct, SIGNAL(triggered()), ImageFilters, SLOT(cannyFilter()));
   
   imageMenu->addAction(houghCircleAct);
-  connect(houghCircleAct, SIGNAL(triggered()), this, SLOT(houghFilter()));
+  connect(houghCircleAct, SIGNAL(triggered()), ImageFilters, SLOT(houghFilter()));
  
+  connect(ImageFilters, SIGNAL(filterExecutionDone()), this, SLOT(showFilteredImage()));
+  
   colorMapMenu->addAction(linearGrayAct);
   colorMapMenu->addAction(cubeHelixAct);
   colorMapMenu->addAction(jetAct);
@@ -92,53 +121,6 @@ fondaWin::fondaWin() : QWidget()
   
   connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
   
-  
-
-
-}
-
-void fondaWin::gaussianFilter()
-{
-  cv::Size filterSize(15,15);
-  cv::GaussianBlur(*matriceImage, *matriceImageFiltered, filterSize,15);
-  emit toggleToFilteredImage();
-}
-
-void fondaWin::houghFilter()
-{
-  cv::vector<cv::Vec3f> circles;
-  cv::HoughCircles(*matriceImage, circles, CV_HOUGH_GRADIENT, 2, 100);
-  std::cout<<circles.size()<<std::endl;
-  *matriceImageFiltered = matriceImage->clone();
-   for( size_t i = 0; i < circles.size(); i++ )
-    {
-      cv::Point center(round(circles[i][0]), round(circles[i][1]));
-      int radius = round(circles[i][2]);
-      // draw the circle center
-      cv::circle( *matriceImageFiltered, center, 3, cv::Scalar(255,255,255), -1, 8, 0 );
-      // draw the circle outline
-      cv::circle( *matriceImageFiltered, center, radius, cv::Scalar(0,0,255), 3, 8, 0 );
-    }
-   emit toggleToFilteredImage();
-}
-
-void fondaWin::medianFilter()
-{ 
- 
-  cv::medianBlur(*matriceImage, *matriceImageFiltered, 3 );
-  emit toggleToFilteredImage();
-}
-
-void fondaWin::cannyFilter()
-{
-  cv::Canny(*matriceImage, *matriceImageFiltered, 12.0, 50.0);
-  emit toggleToFilteredImage();
-}
-
-void fondaWin::sobelFilter()
-{
-  cv::Sobel(*matriceImage, *matriceImageFiltered, -1,1,1);
-  emit toggleToFilteredImage();    
 }
 
 
@@ -150,22 +132,25 @@ void fondaWin::openDialogFile()
 }
 
 void fondaWin::showFilteredImage()
-{ 
-  imageWidget->setMat(*matriceImageFiltered);
+{
+  imageContainer *imC = imManager->getLastContainedImageInList();
+  imageWidget->setMat(*(imC->getImageMatrix()));
 }
 
  void fondaWin::showOrigImage()
 {
-  imageWidget->setMat(*matriceImage);
+  imageContainer *imC = imManager->getFirstLoadedImage();
+  imageWidget->setMat(*(imC->getImageMatrix()));
 }
 
 void fondaWin::loadImage()
 { 
   if(!this->fileName.isNull())
     {
+     cv::Mat  *matriceImage;
      
-      std::auto_ptr<CCfits::FITS> pInfile(new CCfits::FITS(fileName.toStdString(),CCfits::Read,true));
-    CCfits::PHDU& image = pInfile->pHDU(); 
+     std::auto_ptr<CCfits::FITS> pInfile(new CCfits::FITS(fileName.toStdString(),CCfits::Read,true));
+     CCfits::PHDU& image = pInfile->pHDU(); 
     
     std::valarray<unsigned long>  contents;
         
@@ -178,31 +163,39 @@ void fondaWin::loadImage()
     long ax2(image.axis(1));
     std::cout<<ax1<<" "<<ax2<<std::endl;
     // create matrix to store image content
-
+    imageContainer *readImage;
     switch(image.bitpix()) {
     case 8 :
-      this->matriceImage = new cv::Mat(ax2, ax1, CV_8U);
+      matriceImage = new cv::Mat(ax2, ax1, CV_8U);
+      //readImage = new imageContainer(new cv::Mat(ax2, ax1, CV_8U),"loaded8bitImages");
       break;
     case -32 : // IEEE single precision floating point
       std::cout<<"Image format:: IEEE single precision floating point"<<std::endl;
-      this->matriceImage = new cv::Mat(ax2, ax1, CV_32F);
+      matriceImage = new cv::Mat(ax2, ax1, CV_32F);
+      // readImage = new imageContainer(new cv::Mat(ax2, ax1, CV_8U),"loaded32bitImages");
       break;
     case -64 : // IEEE double precision point
       std::cout<<"Image format:: IEEE double precision floating point"<<std::endl;
-      this->matriceImage = new cv::Mat(ax2,ax1, CV_64F);
+      matriceImage = new cv::Mat(ax2,ax1, CV_64F);
+      //readImage = new imageContainer(new cv::Mat(ax2, ax1, CV_8U),"loaded64bitImages");
+      //imageContainer readImage=imageContainer();
     }
 
-    this->matriceImageFiltered = new cv::Mat(ax2,  ax1, CV_8U);
+    
     std::vector<float> vectImage;
     for (int j = 0; j<ax2; ++j)
       {
 	for(int k=0; k<ax1 ; ++k)
 	  {
-	    this->matriceImage->at<float>(ax2-1-j,k) = contents[k+j*ax1];
+	    matriceImage->at<float>(ax2-1-j,k) = contents[k+j*ax1];
 	    vectImage.push_back(contents[k+j*ax1]);
 	  }	
 	
       }
+    readImage = new imageContainer(matriceImage,"loadedImages");
+    readImage->setLoadedOn();
+    imManager->addImageContainerInList(readImage);
+
     std::sort (vectImage.begin(),vectImage.end());
     // TEST POUR UN HISTOGRAMMe!!
     double maxIm = 0;
@@ -290,8 +283,10 @@ void fondaWin::loadImage()
     // imageWidget->move(280,40);
     //scrollArea = new QScrollArea(this);
        //scrollArea->setBackgroundRole(QPalette::Dark);
-    scrollArea->setWidget(imageWidget->getLabel());    
-    // imageWidget->show();
+   
+    scrollArea->setWidget(imageWidget->getLabel());
+    
+   
     
 
     
@@ -434,9 +429,6 @@ void fondaWin::loadImage()
       }
       cpt++;
     } 
-       
-    
-
 
     }
 

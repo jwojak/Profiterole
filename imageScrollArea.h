@@ -6,6 +6,7 @@
 #include <QScrollArea>
 #include <QMouseEvent>
 #include <QPoint>
+#include <QScrollBar>
 #include <iostream> 
 class imageScrollArea : public QScrollArea
 {
@@ -19,10 +20,13 @@ class imageScrollArea : public QScrollArea
   void mouseMoveEvent( QMouseEvent *event);
 
  signals:
-  void rescaleImageDynamiqSig(double a, double b); //todo passer des arguments
+  void rescaleImageDynamiqSig(double a, double b); 
+  void displayFlyingPosInImageSig(int x, int y);
 
  private:
   QPoint dragStartPosition;
+  QPoint pointerClickPosInImage;
+  QPoint pointerFlyingPosInImage;
   
 };
 

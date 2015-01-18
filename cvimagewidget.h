@@ -32,7 +32,6 @@ class CVImageWidget : public QWidget
    void setLabel();
    void loadColorMap(std::string filename);
 
-
       signals:
 public slots:
    void rescaleImageDynamiq(double a, double b);//should be private ?
