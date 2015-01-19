@@ -8,6 +8,7 @@ imageContainer::imageContainer()
 imageContainer::~imageContainer()
 {
   //delete this->_matriceImage;
+this->_imageName = "NoName";
 }
 
 

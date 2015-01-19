@@ -6,6 +6,7 @@ imagesManager *imagesManager::instance = NULL;
 void imagesManager::addImageContainerInList(imageContainer* imaCont)
 {
   (this->imagesList).push_back(imaCont);
+  emit changeOnImageList();
 }
 
 imageContainer* imagesManager::getLastContainedImageInList()
@@ -16,6 +17,19 @@ imageContainer* imagesManager::getLastContainedImageInList()
 imageContainer* imagesManager::getSelectedImage()
 {
   return (this->imagesList).front();
+}
+
+std::list< std::string > imagesManager::getListImageNames()
+{
+  imageContainer* loadedImC = NULL;
+  std::list< std::string > imageNameList;
+  for (std::list< imageContainer* >::iterator it=imagesList.begin(); it != imagesList.end() ; ++it )
+    {
+      std::cout<<"on entre dans la boucle"<<std::endl;
+      loadedImC = *it;
+      imageNameList.push_back(loadedImC->getImageName());
+    }
+  return imageNameList;
 }
 
 imageContainer* imagesManager::getFirstLoadedImage()

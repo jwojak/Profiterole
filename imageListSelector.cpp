@@ -10,16 +10,25 @@ imageListSelector::imageListSelector() : QWidget()
 
 imageListSelector::imageListSelector(QWidget *parent) : QWidget()
 {
-  //imManager->getInstance();
-  buttonGroup = new QButtonGroup(parent);
-  size_t nbImInList = 3;//imManager->nbImagesInList();
-  nbImInList = 3; //pour le test! 
-  for(size_t idxIm = 0; idxIm < nbImInList; ++idxIm)
-    {
-      std::cout<<"on contruit le bouton"<<std::endl;
-      QPushButton* button = new QPushButton("a", this );
-      //button->setGeometry(QRect(QPoint(10, 10+10*idxIm), QSize(20, 20)));
-      (this->buttonGroup)->addButton(button);
-    }
+  imageListTable = new QTableWidget(this);
+  imageListTable->setColumnCount(1);
 }
 
+void imageListSelector::buildListImageSelector()
+{
+  imagesManager *im =  imManager->getInstance();
+  size_t nbImInList = im->nbImagesInList();
+  imageListTable->setRowCount(nbImInList);
+
+  std::cout<<"toto"<<std::endl;
+  std::list<std::string> imagesNameList = im->getListImageNames();
+  std::cout<<"titi"<<std::endl;
+  int idxIm = 0;
+  for(std::list<std::string >::iterator it=imagesNameList.begin(); it != imagesNameList.end(); ++it)
+    { 
+      QTableWidgetItem * item= new QTableWidgetItem(); 
+      imageListTable->setItem (idxIm, 0,  item );
+      item->setText(QString((*it).c_str()));
+      idxIm++;
+    }
+}

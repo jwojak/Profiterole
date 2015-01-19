@@ -37,7 +37,7 @@ fondaWin::fondaWin() : QWidget()
   //customPlot->resize(247,247);
   imageStatTable = new QTableWidget(this);
   grille->addWidget(imageStatTable,4,0,2,1);
-  grille->addWidget(imageManagerSelector,0,7);
+  grille->addWidget(imageManagerSelector,0,7,2,1);
   //imageStatTable->move(0, 540);
   //imageManagerSelector->move(0,940); 
   
@@ -120,6 +120,7 @@ fondaWin::fondaWin() : QWidget()
   signalMapper->setMapping(roulletAct,5);
   
   connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
+  connect(imManager, SIGNAL(changeOnImageList()), imageManagerSelector, SLOT(buildListImageSelector()));
   
 }
 

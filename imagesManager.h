@@ -4,11 +4,16 @@
 #include <list>
 #include "imageContainer.h"
 #include <cstddef> // sinon utiliser nullptr a la place de NULL
+#include <string> // passer a des qstring ??
+#include <iostream>
+
+#include <QObject>
 
 
-
-class imagesManager
+class imagesManager : public QObject
 {
+
+ Q_OBJECT
 
  private:
  imagesManager(){};
@@ -41,7 +46,10 @@ class imagesManager
   imageContainer* getSelectedImage();
   imageContainer* getFirstLoadedImage();
   size_t nbImagesInList();
+  std::list<std::string> getListImageNames();
 
+ signals:
+   void changeOnImageList();
 };
 
 #endif //__IMAGES_MANAGER_SINGLETON_
