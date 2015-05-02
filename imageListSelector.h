@@ -3,22 +3,26 @@
 #ifndef ____IMAGELISTSELECTOR__H___
 #define ____IMAGELISTSELECTOR__H___
  
+#include <QWidget>
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTableWidget>
+#include <QVBoxLayout>
+#include <QTextEdit>
+#include <QGroupBox>
 
 #include "imagesManager.h"
 #include <iostream>
 #include <string>
 #include <list>
 
-class imageListSelector : public QWidget
+class imageListSelector : public QGroupBox
 {
  Q_OBJECT
 
 public:
- imageListSelector();
+ //imageListSelector();
  imageListSelector(QWidget *parent=NULL);
 
 public slots:
@@ -26,8 +30,10 @@ public slots:
 
  private:
  imagesManager *imManager;
- QButtonGroup *buttonGroup;
- QTableWidget *imageListTable;
+ QVBoxLayout *qvbox;
+ std::list<QRadioButton *> radioButtonList;
+ //QButtonGroup *buttonGroup;
+ //QTableWidget *imageListTable;
 };
 
 

@@ -16,6 +16,7 @@ fondaWin::fondaWin() : QWidget()
   scrollArea = new imageScrollArea(this);
   headerTable = new  QTableWidget(this);
   imageManagerSelector = new imageListSelector(this);
+  //QTextEdit *textTest = new QTextEdit("titi", this);
   scrollArea->setMouseTracking(true);
   
   
@@ -24,7 +25,7 @@ fondaWin::fondaWin() : QWidget()
   //cursorInfoText->resize(260,30);
   grille->addWidget(headerTable, 0,0,2,1);
   grille->addWidget(scrollArea,0,1,6,6);
-  grille->addWidget(cursorInfoText,1,7);
+  //grille->addWidget(cursorInfoText,1,7);
   grille->setColumnStretch(0,0);
   grille->setColumnStretch(1,0);
   grille->setColumnStretch(2,2);
@@ -33,20 +34,11 @@ fondaWin::fondaWin() : QWidget()
 
   customPlot = new QCustomPlot(this);
   grille->addWidget(customPlot,2,0,2,1);
-  //customPlot->move(5,280);
-  //customPlot->resize(247,247);
+  
   imageStatTable = new QTableWidget(this);
   grille->addWidget(imageStatTable,4,0,2,1);
   grille->addWidget(imageManagerSelector,0,7,2,1);
-  //imageStatTable->move(0, 540);
-  //imageManagerSelector->move(0,940); 
-  
-  //imageManagerSelector->setVisible(true);//show();
-  //imageManagerSelector->resize(200,200);
-  //imageManagerList->move(5,280+247+10);
-  //QAbstractButton boutonTest0 = new QAbstractButton();
-  //QAbstractButton boutonTest1 = b
-  //imageManagerList->addButton (  )
+  //grille->addWidget(textTest, 0,7,2,1);
 
   QMenuBar *mainMenu = new QMenuBar( this );
   QMenu *fileMenu = mainMenu->addMenu("File");

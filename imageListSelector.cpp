@@ -2,33 +2,50 @@
 
 #include "imageListSelector.h"
 
-imageListSelector::imageListSelector() : QWidget()
-{
+//imageListSelector::imageListSelector() : QWidget()
+//{
   //imManager->getInstance();
  
-}
+//}
 
-imageListSelector::imageListSelector(QWidget *parent) : QWidget()
+imageListSelector::imageListSelector(QWidget *parent) : QGroupBox(parent)
 {
-  imageListTable = new QTableWidget(this);
-  imageListTable->setColumnCount(1);
+  
+  qvbox = new QVBoxLayout(parent);
+ 
+  this->setLayout(qvbox);
+  this->setTitle("loaded images list");
 }
 
 void imageListSelector::buildListImageSelector()
 {
+  
   imagesManager *im =  imManager->getInstance();
   size_t nbImInList = im->nbImagesInList();
-  imageListTable->setRowCount(nbImInList);
+  //imageListTable->setRowCount(nbImInList);
 
-  std::cout<<"toto"<<std::endl;
+
   std::list<std::string> imagesNameList = im->getListImageNames();
-  std::cout<<"titi"<<std::endl;
-  int idxIm = 0;
+  
+  /*remove all radio button*/
+  for(std::list<QRadioButton *>::iterator butIt=radioButtonList.begin(); butIt != radioButtonList.end(); ++butIt)
+    {
+      delete (*butIt);    
+    }
+  
+  /*clean the list*/
+  radioButtonList.clear();
+  
   for(std::list<std::string >::iterator it=imagesNameList.begin(); it != imagesNameList.end(); ++it)
     { 
-      QTableWidgetItem * item= new QTableWidgetItem(); 
-      imageListTable->setItem (idxIm, 0,  item );
-      item->setText(QString((*it).c_str()));
-      idxIm++;
+      QRadioButton *button = new QRadioButton(QString((*it).c_str()), this);  
+    
+      qvbox->addWidget(button);
+      if(imManager->isSelectedImage(*it))
+	{
+	  button->setChecked(true);
+	}
+      radioButtonList.push_back(button);   
     }
+  
 }

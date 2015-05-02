@@ -44,6 +44,7 @@ class imagesManager : public QObject
   void addImageContainerInList( imageContainer *imaCont);
   imageContainer* getLastContainedImageInList();
   imageContainer* getSelectedImage();
+  bool isSelectedImage(std::string);
   imageContainer* getFirstLoadedImage();
   size_t nbImagesInList();
   std::list<std::string> getListImageNames();

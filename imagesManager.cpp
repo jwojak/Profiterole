@@ -16,7 +16,19 @@ imageContainer* imagesManager::getLastContainedImageInList()
 
 imageContainer* imagesManager::getSelectedImage()
 {
-  return (this->imagesList).front();
+  for (std::list< imageContainer*>::iterator it = imagesList.begin();  it != imagesList.end(); ++it)
+    {
+      if((*it)->isSelected())
+	{
+	  return (*it);
+	}
+    }
+  return NULL;
+}
+
+bool  imagesManager::isSelectedImage(std::string)
+{
+  return true;
 }
 
 std::list< std::string > imagesManager::getListImageNames()
@@ -25,7 +37,6 @@ std::list< std::string > imagesManager::getListImageNames()
   std::list< std::string > imageNameList;
   for (std::list< imageContainer* >::iterator it=imagesList.begin(); it != imagesList.end() ; ++it )
     {
-      std::cout<<"on entre dans la boucle"<<std::endl;
       loadedImC = *it;
       imageNameList.push_back(loadedImC->getImageName());
     }
