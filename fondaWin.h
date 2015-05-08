@@ -17,10 +17,9 @@
 //#include <QScrollArea>
 #include <QTableWidget> // TO REMOVE
 #include <QSignalMapper>
- #include <QGridLayout>
+#include <QGridLayout>
 
-//include opencv
-#include <opencv2/core/core.hpp>
+
 
 //include ccfits
 #include <CCfits>
@@ -28,7 +27,6 @@
 //mes includes
 #include <cvimagewidget.h>
 #include <imageScrollArea.h>
-#include <qcustomplot.h>
 #include <coordDisplayer.h>
 #include <imageFilters.h>
 #include "imagesManager.h"
@@ -37,6 +35,7 @@
 #include "imageLoader.h"
 #include "imageHeader.h"
 #include "imageStatTable.h"
+#include "imageHistoDisplayer.h"
 
 //#include <type_traits>  // pour le prochain upgrade en c++11
 
@@ -52,7 +51,6 @@ class fondaWin : public QWidget
 
   public slots:
     void openDialogFile();
-    void loadImage();
     void showFilteredImage();
     void showOrigImage();   
 
@@ -65,11 +63,11 @@ class fondaWin : public QWidget
     QString fileName;
     CVImageWidget* imageWidget;
     QScrollArea* scrollArea;
-    QTableWidget *headerTable;
-    QCustomPlot *customPlot;
+    imageHeader *headerTable;
     coordDisplayer *cursorInfoText;
     imageListSelector *imageManagerSelector;
     imageStatTable *imaStatTable;
+    imageHistoDisplayer *imaHistoDisplayer;
 };
 
 

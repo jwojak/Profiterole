@@ -2,8 +2,11 @@
 #define __IMAGECONTAINER_H__
 
 #include <opencv2/core/core.hpp>
+#include "opencv2/imgproc/imgproc.hpp"
+
 #include <string>
 #include <QString>
+#include <QVector>
 
 
 class imageContainer
@@ -17,7 +20,10 @@ class imageContainer
   double _imaMean;
   double _imaStdDev;
   double _imaMedian;
- 
+  QVector<double> *_histogXbin;
+  QVector<double> *_histogYVal;
+  double _histogMaxVal;
+
   bool _isSelected;
   bool _isLoadedImage;
   std::map<QString, QString> *_headerContent;
@@ -41,6 +47,9 @@ class imageContainer
   double getStdDev();
   double getMin();
   double getMax();
+  QVector<double>* getHistogXbin();
+  QVector<double>* getHistogYVal();
+  size_t getHistogBinMax();
 
   void renameImage(std::string newName);
   bool isSelected();

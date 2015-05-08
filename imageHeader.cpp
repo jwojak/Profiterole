@@ -17,7 +17,7 @@ void imageHeader::updateContent()
   // TODO REPLACER CE TEST PAR UNE ENCAPSULATION DANS UN TRY!
   if(curIma == NULL)
     {
-      std::cout << "OHOHOHO" << std::endl;
+      std::cout << "PAS DE CURIMA imageHeader.cpp" << std::endl;
     }
  
   const std::map<QString, QString> *imaHeader = curIma->getHeaderContent();
@@ -30,7 +30,7 @@ void imageHeader::updateContent()
   size_t cpt = 0;
   for (std::map<QString,QString>::const_iterator it=imaHeader->begin(); it!=imaHeader->end(); ++it)
     {
-      std::cout<< (it->first).toStdString() << " = " << (it->second).toStdString() << std::endl; 
+      // std::cout<< (it->first).toStdString() << " = " << (it->second).toStdString() << std::endl; 
       QTableWidgetItem *currentItem = new QTableWidgetItem();
       this->setItem(cpt,0,currentItem);
       currentItem->setText(it->first);

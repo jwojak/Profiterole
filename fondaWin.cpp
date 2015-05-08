@@ -33,8 +33,8 @@ fondaWin::fondaWin() : QWidget()
   grille->setColumnStretch(7,1);
   
 
-  customPlot = new QCustomPlot(this);
-  grille->addWidget(customPlot,2,0,2,1);
+  imaHistoDisplayer = new imageHistoDisplayer(this);
+  grille->addWidget(imaHistoDisplayer,2,0,2,1);
   grille->addWidget(imaStatTable,4,0,2,1);
   grille->addWidget(imageManagerSelector,0,7,2,1);
   //grille->addWidget(textTest, 0,7,2,1);
@@ -77,6 +77,7 @@ fondaWin::fondaWin() : QWidget()
   connect(imaLoader, SIGNAL(imageLoadedDone()), this, SLOT(showOrigImage()));
   connect(imaLoader, SIGNAL(imageLoadedDone()), headerTable, SLOT(updateContent()));
   connect(imaLoader, SIGNAL(imageLoadedDone()), imaStatTable, SLOT(updateContent()));
+  connect(imaLoader, SIGNAL(imageLoadedDone()), imaHistoDisplayer, SLOT(updateContent()));
 
   imageMenu->addAction(backToOrigImageAct);
   connect(backToOrigImageAct,SIGNAL(triggered()), this, SLOT(showOrigImage()));
@@ -145,125 +146,3 @@ void fondaWin::showFilteredImage()
   // fin juste en depannage trouver
 }
 
-void fondaWin::loadImage()
-{ 
-    
-    std::vector<float> vectImage;
-    /* for (int j = 0; j<ax2; ++j)
-      {
-	for(int k=0; k<ax1 ; ++k)
-	  {
-	    matriceImage->at<float>(ax2-1-j,k) = contents[k+j*ax1];
-	    vectImage.push_back(contents[k+j*ax1]);
-	  }	
-	
-	  }
-    readImage = new imageContainer(matriceImage,"loadedImages");
-    readImage->setLoadedOn();
-    imManager->addImageContainerInList(readImage);
-
-    std::sort (vectImage.begin(),vectImage.end());
-    // TEST POUR UN HISTOGRAMMe!!
-    double maxIm = 0;
-    double minIm = 0;
-    cv::minMaxLoc(*matriceImage, &minIm, &maxIm, 0, 0);
-   
-    cv::Mat meanIm0;
-    cv::Mat stdDevIm0; 
-    cv::meanStdDev(*matriceImage, meanIm0, stdDevIm0);
-    int histSize = maxIm;
-    imageStatTable->setRowCount(5);
-    imageStatTable->setColumnCount(2);
-    QTableWidgetItem *maxItem = new QTableWidgetItem();
-    imageStatTable->setItem(0,0,maxItem);
-    maxItem->setText("max");
-    QTableWidgetItem *maxItemValue = new QTableWidgetItem();
-    imageStatTable->setItem(0,1,maxItemValue);
-    maxItemValue->setText(QString::number(maxIm));
-    
-          
-    QTableWidgetItem *minItem = new QTableWidgetItem();
-    imageStatTable->setItem(1,0,minItem);
-    minItem->setText("min");
-    QTableWidgetItem *minItemValue = new QTableWidgetItem();
-    imageStatTable->setItem(1,1,minItemValue);
-    minItemValue->setText(QString::number(minIm));
-
-    QTableWidgetItem *meanItem = new QTableWidgetItem();
-    imageStatTable->setItem(2,0,meanItem);
-    meanItem->setText("mean");
-    QTableWidgetItem *meanItemValue = new QTableWidgetItem();
-    imageStatTable->setItem(2,1,meanItemValue);
-    meanItemValue->setText(QString::number(meanIm0.at<double>(0,0)));
-
-    QTableWidgetItem *stdDevItem = new QTableWidgetItem();
-    imageStatTable->setItem(3,0,stdDevItem);
-    stdDevItem->setText("stdDev");
-    QTableWidgetItem *stdDevItemValue = new QTableWidgetItem();
-    imageStatTable->setItem(3,1,stdDevItemValue);
-    stdDevItemValue->setText(QString::number(stdDevIm0.at<double>(0,0)));
-
-    QTableWidgetItem *medianItem = new QTableWidgetItem();
-    imageStatTable->setItem(4,0,medianItem);
-    medianItem->setText("median");
-    QTableWidgetItem *medianItemValue = new QTableWidgetItem();
-    imageStatTable->setItem(4,1,medianItemValue);
-    medianItemValue->setText(QString::number(vectImage[vectImage.size()/2]));
-
-
-
-    
-
-    float range[] = {0,histSize};
-    const float* histRange = {range};
-    bool uniform = true; bool accumulate = false;
-    cv::Mat im_hist;
-    cv::calcHist(matriceImage, 1, 0, cv::Mat(), im_hist, 1, &histSize, &histRange, uniform, accumulate );
-    std::cout<<"histogramme calcule!"<<std::endl;
-    // FIN TEST POUR UN HISTOGRAMMe !!
-    double maxVal = 1;
-    cv::minMaxLoc(im_hist, 0, &maxVal, 0, 0);
-    // generate some data:
-    QVector<double> x(histSize), y(histSize); // initialize with entries 0..100
-    for (int i=0; i<histSize; ++i)
-      {
-	x[i] = i; // x goes from -1 to 1
-	y[i] = (im_hist.at<float>(i))/maxVal; // let's plot a quadratic function
-	
-      }
-    // create graph and assign data to it:
-   
-    // TODO NE SURTOUT PAS LAISSER CES VALEURS EN DUR !!! C EST JUSTE POUR UN TEST  DE GRAPHIC !!
-   
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(x, y);
-    // give the axes some labels:
-    customPlot->xAxis->setLabel("pixel values");
-    customPlot->yAxis->setLabel("relative nb pix");
-    // set axes ranges, so we see all data:
-    customPlot->xAxis->setRange(0, histSize);
-    customPlot->yAxis->setRange(0, 1);
-    customPlot->replot();
-      
-    imageWidget->setMat(*matriceImage);
-    // imageWidget->move(280,40);
-    //scrollArea = new QScrollArea(this);
-       //scrollArea->setBackgroundRole(QPalette::Dark);
-   
-    
-    
-   
-    
-
-    
-    //get the keyword
-    std::map< string, CCfits::Keyword * > & filesKeyword=image.keyWord();
-     headerTable->setRowCount(filesKeyword.size());
-     headerTable->setColumnCount(3);
-    // headerTable = new QTableWidget(filesKeyword.size(),3,this);
-  
-    //show the content of the keyword map in a QtableWidget
-    int cpt=0;
-       }
-    */
-}

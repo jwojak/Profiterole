@@ -38,7 +38,7 @@ void imageLoader::readFitsImage(QString fname)
       image.read(contents);
       long ax1(image.axis(0));
       long ax2(image.axis(1));
-      std::cout<<ax1<<" "<<ax2<<std::endl;
+      
       // create matrix to store image content
       //imageContainer *readImage;
       switch(image.bitpix()) 
@@ -194,19 +194,8 @@ void imageLoader::readFitsImage(QString fname)
 		
       if(r!=14)
 	{
-	  std::cout<<(ss.str()).c_str()<<std::endl;
 	  headerContent->insert(std::pair<QString,QString>((it->first).c_str(),(ss.str()).c_str()));      
 	}
-      //std::cout<<"value tentative = " <<ss.str() << std::endl;
-      //QTableWidgetItem *currentItem = new QTableWidgetItem();
-      //headerTable->setItem(cpt,0,currentItem);
-	// currentItem->setText((it->first).c_str());
-	//if(r!=14){
-	//QTableWidgetItem *currentItem2 = new QTableWidgetItem();
-	//headerTable->setItem(cpt,1,currentItem2);
-	// currentItem2->setText((ss.str()).c_str());
-	//}
-	//cpt++;
     } 
 
       _loadedImage = new imageContainer(matriceImage,"loaded Image");
