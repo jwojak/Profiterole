@@ -5,6 +5,7 @@ imagesManager *imagesManager::instance = NULL;
 
 void imagesManager::addImageContainerInList(imageContainer* imaCont)
 {
+  std::cout<<"OHEHHEHEHEEH COUCOUC"<<std::endl;
   (this->imagesList).push_back(imaCont);
   emit changeOnImageList();
 }
@@ -16,8 +17,12 @@ imageContainer* imagesManager::getLastContainedImageInList()
 
 imageContainer* imagesManager::getSelectedImage()
 {
+  std::cout<<"On vient aux selected apres!!"<<std::endl;
+  std::cout<<"Parie qu'on echoue sur le isSeected"<<std::endl;
   for (std::list< imageContainer*>::iterator it = imagesList.begin();  it != imagesList.end(); ++it)
     {
+      
+      std::cout<< "isSel: "<<(*it)->isSelected()<<std::endl; 
       if((*it)->isSelected())
 	{
 	  return (*it);

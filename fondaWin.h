@@ -15,7 +15,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 //#include <QScrollArea>
-#include <QTableWidget>
+#include <QTableWidget> // TO REMOVE
 #include <QSignalMapper>
  #include <QGridLayout>
 
@@ -34,7 +34,9 @@
 #include "imagesManager.h"
 #include "imageContainer.h"
 #include "imageListSelector.h"
-
+#include "imageLoader.h"
+#include "imageHeader.h"
+#include "imageStatTable.h"
 
 //#include <type_traits>  // pour le prochain upgrade en c++11
 
@@ -55,7 +57,7 @@ class fondaWin : public QWidget
     void showOrigImage();   
 
  signals:
-    void fileNameChanged();
+    void fileNameChanged(QString);
     void toggleToFilteredImage();
     
  private:
@@ -65,9 +67,9 @@ class fondaWin : public QWidget
     QScrollArea* scrollArea;
     QTableWidget *headerTable;
     QCustomPlot *customPlot;
-    QTableWidget *imageStatTable;
     coordDisplayer *cursorInfoText;
     imageListSelector *imageManagerSelector;
+    imageStatTable *imaStatTable;
 };
 
 
