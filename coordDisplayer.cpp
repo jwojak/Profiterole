@@ -10,7 +10,7 @@ void coordDisplayer::displayFlyingPosInImage(const int x, const int y)
 {
   std::stringstream ss;
   ss << x;
-  std::cout<<"emit??"<<std::endl;
+  //  std::cout<<"emit??"<<std::endl;
   this->setText("Cursor Pos: [" + QString::number(x) + " ; " + QString::number(y) + "]" );
 }
 
