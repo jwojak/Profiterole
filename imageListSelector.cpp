@@ -17,6 +17,38 @@ imageListSelector::imageListSelector(QWidget *parent) : QGroupBox(parent)
   this->setTitle("loaded images list");
 }
 
+void imageListSelector::updateContent()
+{
+
+   imagesManager *im =  imManager->getInstance();
+  size_t nbImInList = im->nbImagesInList();
+  //imageListTable->setRowCount(nbImInList);
+
+
+  std::list<std::string> imagesNameList = im->getListImageNames();
+  
+  /*remove all radio button*/
+  for(std::list<QRadioButton *>::iterator butIt=radioButtonList.begin(); butIt != radioButtonList.end(); ++butIt)
+    {
+      delete (*butIt);    
+    }
+  
+  /*clean the list*/
+  radioButtonList.clear();
+  
+  for(std::list<std::string >::iterator it=imagesNameList.begin(); it != imagesNameList.end(); ++it)
+    { 
+      QRadioButton *button = new QRadioButton(QString((*it).c_str()), this);  
+    
+      qvbox->addWidget(button);
+      if(imManager->isSelectedImage(*it))
+	{
+	  button->setChecked(true);
+	}
+      radioButtonList.push_back(button);   
+    }
+}
+
 void imageListSelector::buildListImageSelector()
 {
   

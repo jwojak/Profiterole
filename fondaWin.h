@@ -66,7 +66,7 @@ class fondaWin : public QWidget
     QScrollArea* scrollArea;
     imageHeader *headerTable;
     coordDisplayer *cursorInfoText;
-    imageListSelector *imageManagerSelector;
+    imageListSelector *imaListSelector;
     imageStatTable *imaStatTable;
     imageHistoDisplayer *imaHistoDisplayer;
 };

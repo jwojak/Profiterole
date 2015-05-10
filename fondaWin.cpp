@@ -17,7 +17,7 @@ fondaWin::fondaWin() : QWidget()
   scrollArea = new imageScrollArea(this);
   headerTable = new  imageHeader(this);
   imaStatTable = new imageStatTable(this);
-  imageManagerSelector = new imageListSelector(this);
+  imaListSelector = new imageListSelector(this);
   imaHistoDisplayer = new imageHistoDisplayer(this);
   cursorInfoText = new coordDisplayer(this);
 
@@ -40,7 +40,7 @@ fondaWin::fondaWin() : QWidget()
   
   grille->addWidget(imaHistoDisplayer,2,0,2,1);
   grille->addWidget(imaStatTable,4,0,2,1);
-  grille->addWidget(imageManagerSelector,0,7,2,1);
+  grille->addWidget(imaListSelector,0,7,2,1);
   //grille->addWidget(textTest, 0,7,2,1);
 
   QMenuBar *mainMenu = new QMenuBar( this );
@@ -85,6 +85,7 @@ fondaWin::fondaWin() : QWidget()
   connect(imaLoader, SIGNAL(imageLoadedDone()), headerTable, SLOT(updateContent()));
   connect(imaLoader, SIGNAL(imageLoadedDone()), imaStatTable, SLOT(updateContent()));
   connect(imaLoader, SIGNAL(imageLoadedDone()), imaHistoDisplayer, SLOT(updateContent()));
+  connect(imaLoader, SIGNAL(imageLoadedDone()), imaListSelector, SLOT(updateContent()));
 
   imageMenu->addAction(backToOrigImageAct);
   connect(backToOrigImageAct,SIGNAL(triggered()), this, SLOT(showOrigImage()));
@@ -108,6 +109,7 @@ fondaWin::fondaWin() : QWidget()
   //connect(ImageFilters, SIGNAL(filterExecutionDone()), headerTable, SLOT(updateContent()));
   connect(ImageFilters, SIGNAL(filterExecutionDone()), imaStatTable, SLOT(updateContent()));
   connect(ImageFilters, SIGNAL(filterExecutionDone()), imaHistoDisplayer, SLOT(updateContent()));
+  connect(ImageFilters, SIGNAL(filterExecutionDone()), imaListSelector, SLOT(updateContent()));
 
   colorMapMenu->addAction(linearGrayAct);
   colorMapMenu->addAction(cubeHelixAct);
@@ -127,7 +129,7 @@ fondaWin::fondaWin() : QWidget()
   signalMapper->setMapping(roulletAct,5);
   
   connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
-  //  connect(imManager, SIGNAL(changeOnImageList()), imageManagerSelector, SLOT(buildListImageSelector()));
+  //  connect(imManager, SIGNAL(changeOnImageList()), imaListSelector, SLOT(buildListImageSelector()));
   
 }
 

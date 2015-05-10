@@ -27,6 +27,7 @@ public:
 
 public slots:
  void buildListImageSelector();
+ void updateContent();
 
  private:
  imagesManager *imManager;
