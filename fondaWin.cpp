@@ -107,7 +107,7 @@ fondaWin::fondaWin() : QWidget()
   connect(ImageFilters, SIGNAL(filterExecutionDone()), this, SLOT(showSelectedImage()));
   //connect(ImageFilters, SIGNAL(filterExecutionDone()), headerTable, SLOT(updateContent()));
   connect(ImageFilters, SIGNAL(filterExecutionDone()), imaStatTable, SLOT(updateContent()));
-  //connect(ImageFilters, SIGNAL(filterExecutionDone()), imaHistoDisplayer, SLOT(updateContent()));
+  connect(ImageFilters, SIGNAL(filterExecutionDone()), imaHistoDisplayer, SLOT(updateContent()));
 
   colorMapMenu->addAction(linearGrayAct);
   colorMapMenu->addAction(cubeHelixAct);
