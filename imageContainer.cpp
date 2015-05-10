@@ -1,30 +1,26 @@
 #include "imageContainer.h"
 #include "iostream"
 
-imageContainer::imageContainer()
-{
-  _isLoadedImage = false; //a faux par defaux, on met a true explicietement quand on charge une image avec le loader
-}
 
+imageContainer::imageContainer():QObject()
+{
+  // _isLoadedImage = false; //a faux par defaux, on met a true explicietement quand on charge une image avec le loader
+}
+/*
 imageContainer::~imageContainer()
 {
   //delete this->_matriceImage;
 this->_imageName = "NoName";
-}
+}*/
 
 
-
-
-imageContainer::imageContainer(cv::Mat *matriceImage, std::string imageName)
+void imageContainer::updateStats()
 {
-  this->_matriceImage = matriceImage;
-  this->_imageName = imageName;
-  
   // image stats
-  cv::minMaxLoc(*matriceImage, &_imaMin, &_imaMax, 0, 0);
+  cv::minMaxLoc(*_matriceImage, &_imaMin, &_imaMax, 0, 0);
   cv::Mat meanIm0;
   cv::Mat stdDevIm0; 
-  cv::meanStdDev(*matriceImage, meanIm0, stdDevIm0);
+  cv::meanStdDev(*_matriceImage, meanIm0, stdDevIm0);
   _imaMean = meanIm0.at<double>(0,0);
   _imaStdDev = stdDevIm0.at<double>(0,0);
   
@@ -35,10 +31,10 @@ imageContainer::imageContainer(cv::Mat *matriceImage, std::string imageName)
   const float* histRange = {range};
   cv::Mat im_hist;
   bool uniform = true;
-  bool accumulate = true;
+  bool accumulate = false;
   int histSize = static_cast<int>(_imaMax);
-  //cv::calcHist(matriceImage, 1, 0, cv::Mat(), im_hist, 1, &histSize, &histRange, uniform, accumulate );
-  cv::calcHist(matriceImage, 1, 0, cv::Mat(), im_hist, 1, &histSize, &histRange, uniform, accumulate);
+ 
+  cv::calcHist(_matriceImage, 1, 0, cv::Mat(), im_hist, 1, &histSize, &histRange, uniform, accumulate);
   cv::minMaxLoc(im_hist,0,&_histogMaxVal,0,0); 
   _histogXbin = new QVector<double>(_histogMaxVal);
   _histogYVal = new QVector<double>(_histogMaxVal);
@@ -48,7 +44,12 @@ imageContainer::imageContainer(cv::Mat *matriceImage, std::string imageName)
       (*_histogXbin)[i] = i;
       (*_histogYVal)[i] = im_hist.at<float>(i);
     }
- 
+}
+
+void imageContainer::setCVMat(cv::Mat *matriceImage, std::string imageName)
+{
+  this->_matriceImage = matriceImage;
+  this->_imageName = imageName;
 }
 
 QVector<double> * imageContainer::getHistogXbin()

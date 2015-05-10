@@ -11,17 +11,21 @@ fondaWin::fondaWin() : QWidget()
   resize(dw.width()*0.7,dw.height()*0.7);
   std::cout<<this<<std::endl;
   imManager = imagesManager::getInstance();
- 
+  
+  //elts on the main panel:
   imageWidget = new CVImageWidget(this);
   scrollArea = new imageScrollArea(this);
   headerTable = new  imageHeader(this);
   imaStatTable = new imageStatTable(this);
   imageManagerSelector = new imageListSelector(this);
+  imaHistoDisplayer = new imageHistoDisplayer(this);
+  cursorInfoText = new coordDisplayer(this);
+
   //QTextEdit *textTest = new QTextEdit("titi", this);
   scrollArea->setMouseTracking(true);
   
   
-  cursorInfoText = new coordDisplayer(this);
+  
   //cursorInfoText->move(5,240);
   //cursorInfoText->resize(260,30);
   grille->addWidget(headerTable, 0,0,2,1);
@@ -33,7 +37,7 @@ fondaWin::fondaWin() : QWidget()
   grille->setColumnStretch(7,1);
   
 
-  imaHistoDisplayer = new imageHistoDisplayer(this);
+  
   grille->addWidget(imaHistoDisplayer,2,0,2,1);
   grille->addWidget(imaStatTable,4,0,2,1);
   grille->addWidget(imageManagerSelector,0,7,2,1);
@@ -52,10 +56,13 @@ fondaWin::fondaWin() : QWidget()
   QAction *sobelFilterAct = new QAction("Sobel Filter", this);
   QAction *cannyEdgesAct = new QAction("Canny Edges", this);
   QAction *houghCircleAct = new QAction("Hough Circles",this);
+
   // FILE MENU ACTIONS !!
   QAction *openAct = new QAction("Open...", this);
+
   // HELP MENU ACTIONS !!
   QAction *helpAct = new QAction("Hi buddies !! this is ds10 ;)",this);
+
   // COLORMAP MENU ACTIONS !!
   QAction *linearGrayAct = new QAction("Linear Gray",this);
   QAction *cubeHelixAct = new QAction("CubeHelix", this);
@@ -97,8 +104,11 @@ fondaWin::fondaWin() : QWidget()
   imageMenu->addAction(houghCircleAct);
   connect(houghCircleAct, SIGNAL(triggered()), ImageFilters, SLOT(houghFilter()));
  
-  connect(ImageFilters, SIGNAL(filterExecutionDone()), this, SLOT(showFilteredImage()));
-  
+  connect(ImageFilters, SIGNAL(filterExecutionDone()), this, SLOT(showSelectedImage()));
+  //connect(ImageFilters, SIGNAL(filterExecutionDone()), headerTable, SLOT(updateContent()));
+  connect(ImageFilters, SIGNAL(filterExecutionDone()), imaStatTable, SLOT(updateContent()));
+  //connect(ImageFilters, SIGNAL(filterExecutionDone()), imaHistoDisplayer, SLOT(updateContent()));
+
   colorMapMenu->addAction(linearGrayAct);
   colorMapMenu->addAction(cubeHelixAct);
   colorMapMenu->addAction(jetAct);
@@ -117,7 +127,7 @@ fondaWin::fondaWin() : QWidget()
   signalMapper->setMapping(roulletAct,5);
   
   connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
-  connect(imManager, SIGNAL(changeOnImageList()), imageManagerSelector, SLOT(buildListImageSelector()));
+  //  connect(imManager, SIGNAL(changeOnImageList()), imageManagerSelector, SLOT(buildListImageSelector()));
   
 }
 
@@ -129,6 +139,12 @@ void fondaWin::openDialogFile()
   emit fileNameChanged(this->fileName);
 }
 
+void fondaWin::showSelectedImage()
+{
+  imageContainer *imC = imManager->getSelectedImage();
+  imageWidget->setMat(*(imC->getImageMatrix()));
+}
+
 void fondaWin::showFilteredImage()
 {
   imageContainer *imC = imManager->getLastContainedImageInList();
@@ -138,7 +154,6 @@ void fondaWin::showFilteredImage()
  void fondaWin::showOrigImage()
 {
   imageContainer *imC = imManager->getFirstLoadedImage();
-  std::cout<<"imCPointer = "<< imC<<std::endl;
  
   imageWidget->setMat(*(imC->getImageMatrix()));
   // juste en depanage  trouver une maniere propre

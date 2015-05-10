@@ -50,7 +50,8 @@ class imagesManager : public QObject
   std::list<std::string> getListImageNames();
 
  signals:
-   void changeOnImageList();
+  void changeOnImageList();
+  void updateImaStats();
 };
 
 #endif //__IMAGES_MANAGER_SINGLETON_

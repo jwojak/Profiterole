@@ -12,6 +12,7 @@
 
 // mes include
 #include "imagesManager.h"
+#include "imageContainer.h"
 
 class imageFilters : public QWidget
 {
@@ -35,7 +36,7 @@ class imageFilters : public QWidget
   
 
  private:
-   void prepareFilter();
+   imageContainer * prepareFilter();
    imagesManager *_imaManager;
 };
 

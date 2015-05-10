@@ -5,7 +5,13 @@ imagesManager *imagesManager::instance = NULL;
 
 void imagesManager::addImageContainerInList(imageContainer* imaCont)
 {
+  for (std::list< imageContainer*>::iterator it = imagesList.begin();  it != imagesList.end(); ++it)
+    {
+      (*it)->setSelectOff(); 
+    }
+  imaCont->setSelectOn();
   (this->imagesList).push_back(imaCont);
+  imaCont->updateStats();
   emit changeOnImageList();
 }
 
@@ -26,6 +32,7 @@ imageContainer* imagesManager::getSelectedImage()
     }
   return NULL;
 }
+
 
 bool  imagesManager::isSelectedImage(std::string)
 {

@@ -24,7 +24,7 @@ void imageStatTable::updateContent()
   QTableWidgetItem *currentItemMeanVal = new QTableWidgetItem();
   this->setItem(0,1,currentItemMeanVal);
   currentItemMeanVal->setText(QString::number(curIma->getMean()));
-
+ 
   QTableWidgetItem *currentItemStdDev = new QTableWidgetItem();
   this->setItem(1,0,currentItemStdDev);
   currentItemStdDev->setText("Std Dev");

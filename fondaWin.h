@@ -53,6 +53,7 @@ class fondaWin : public QWidget
     void openDialogFile();
     void showFilteredImage();
     void showOrigImage();   
+    void showSelectedImage();
 
  signals:
     void fileNameChanged(QString);

@@ -198,9 +198,10 @@ void imageLoader::readFitsImage(QString fname)
 	}
     } 
 
-      _loadedImage = new imageContainer(matriceImage,"loaded Image");
+      _loadedImage = new imageContainer();
+      _loadedImage->setCVMat(matriceImage,"loaded Image");
       _loadedImage->setLoadedOn();
-      _loadedImage->setSelectOn();
+      //_loadedImage->setSelectOn();
       _loadedImage->setHeaderContent(headerContent);
       _imaManager->addImageContainerInList(_loadedImage);
 
