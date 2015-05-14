@@ -7,7 +7,7 @@ imageFilters::imageFilters():QWidget()
  _imaManager = imagesManager::getInstance();   
 }
 
-imageContainer *imageFilters::prepareFilter()
+imageContainer *imageFilters::prepareFilter(std::string appliedFilterName)
 {
   //_imaManager = imagesManager::getInstance();   
   imageContainer *imC = _imaManager->getSelectedImage();
@@ -15,7 +15,7 @@ imageContainer *imageFilters::prepareFilter()
   *outputImageMatrix = (imC->getImageMatrix())->clone();
   //(imC->getImageMatrix())->copyTo(*outputImageMatrix);
   imageContainer *imFiltered = new imageContainer();
-  imFiltered->setCVMat(outputImageMatrix,"filteredImage");
+  imFiltered->setCVMat(outputImageMatrix,appliedFilterName);
   // _imaManager->addImageContainerInList(imFiltered);
   return imFiltered;
 }
@@ -28,7 +28,7 @@ void imageFilters::assignFilteredImageToMain()
 void imageFilters::sobelFilter()
 {
   imageContainer *imC_input = _imaManager->getSelectedImage();
-  imageContainer *imC_output = this->prepareFilter();
+  imageContainer *imC_output = this->prepareFilter("Filered (Soblel)");
   cv::Sobel(*(imC_input->getImageMatrix()), *(imC_output->getImageMatrix()),-1,1,1);
   _imaManager->addImageContainerInList(imC_output);
   emit filterExecutionDone(); 
@@ -39,7 +39,7 @@ void imageFilters::gaussianFilter()
  
   cv::Size filterSize(15,15);
   imageContainer *imC_input = _imaManager->getSelectedImage();
-  imageContainer *imC_output = this->prepareFilter();
+  imageContainer *imC_output = this->prepareFilter("Filered (Gaussian)");
   cv::GaussianBlur(*(imC_input->getImageMatrix()), *(imC_output->getImageMatrix()), filterSize,15);
   _imaManager->addImageContainerInList(imC_output);
   emit filterExecutionDone();
@@ -49,7 +49,7 @@ void imageFilters::medianFilter()
 {
   
   imageContainer *imC_input = _imaManager->getSelectedImage();
-  imageContainer *imC_output = this->prepareFilter() ;
+  imageContainer *imC_output = this->prepareFilter("Filered (Median)") ;
   cv::medianBlur(*(imC_input->getImageMatrix()), *(imC_output->getImageMatrix()), 3);
   _imaManager->addImageContainerInList(imC_output);
   emit filterExecutionDone();
@@ -58,7 +58,7 @@ void imageFilters::medianFilter()
 void imageFilters::cannyFilter()
 {
   imageContainer *imC_input = _imaManager->getSelectedImage();
-  imageContainer *imC_output = this->prepareFilter();
+  imageContainer *imC_output = this->prepareFilter("Filered (Canny)");
   cv::Canny(*(imC_input->getImageMatrix()), *(imC_output->getImageMatrix()),12,.0, 50.0);
   _imaManager->addImageContainerInList(imC_output);
   emit filterExecutionDone();
@@ -66,9 +66,9 @@ void imageFilters::cannyFilter()
 
 void imageFilters::houghFilter()
 {
-  this->prepareFilter();
+  //this->prepareFilter();
   imageContainer *imC_input =  _imaManager->getSelectedImage();
-  imageContainer *imC_output = this->prepareFilter();
+  imageContainer *imC_output = this->prepareFilter("Filered (Hough)");
   cv::vector<cv::Vec3f> circles;
   cv::HoughCircles(*(imC_input->getImageMatrix()), circles, CV_HOUGH_GRADIENT, 2, 100);
   for( size_t i = 0; i < circles.size(); i++ )

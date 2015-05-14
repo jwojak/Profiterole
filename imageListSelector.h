@@ -28,7 +28,12 @@ public:
 public slots:
  void buildListImageSelector();
  void updateContent();
+ void emitToggledFalse(bool );
+ void emitToggledTrue(bool );
 
+ signals:
+   void toggle(bool);
+   
  private:
  imagesManager *imManager;
  QVBoxLayout *qvbox;

@@ -36,7 +36,7 @@ class imageFilters : public QWidget
   
 
  private:
-   imageContainer * prepareFilter();
+   imageContainer * prepareFilter(std::string appliedFilterName);
    imagesManager *_imaManager;
 };
 

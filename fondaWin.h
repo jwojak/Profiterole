@@ -54,6 +54,7 @@ class fondaWin : public QWidget
     void showFilteredImage();
     void showOrigImage();   
     void showSelectedImage();
+    void slotatest();
 
  signals:
     void fileNameChanged(QString);

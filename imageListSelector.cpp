@@ -20,7 +20,7 @@ imageListSelector::imageListSelector(QWidget *parent) : QGroupBox(parent)
 void imageListSelector::updateContent()
 {
 
-   imagesManager *im =  imManager->getInstance();
+  imagesManager *im =  imManager->getInstance();
   size_t nbImInList = im->nbImagesInList();
   //imageListTable->setRowCount(nbImInList);
 
@@ -39,16 +39,32 @@ void imageListSelector::updateContent()
   for(std::list<std::string >::iterator it=imagesNameList.begin(); it != imagesNameList.end(); ++it)
     { 
       QRadioButton *button = new QRadioButton(QString((*it).c_str()), this);  
-    
-      qvbox->addWidget(button);
-      if(imManager->isSelectedImage(*it))
-	{
-	  button->setChecked(true);
-	}
-      radioButtonList.push_back(button);   
+     button->setCheckable(true);
+     qvbox->addWidget(button);
+     
+     if(imManager->isSelectedImage(*it))
+       {
+	 button->setChecked(true);
+	 connect(button,SIGNAL(clicked(bool)), this, SLOT(emitToggledTrue(bool)));
+       }
+     else
+       {
+	 connect(button,SIGNAL(clicked(bool)), this, SLOT(emitToggledFalse(bool)));
+       }
+     
+     radioButtonList.push_back(button);   
     }
 }
 
+void imageListSelector::emitToggledFalse(bool)
+{
+  emit toggled(false);
+}
+
+void imageListSelector::emitToggledTrue(bool)
+{
+  emit toggled(true);
+}
 void imageListSelector::buildListImageSelector()
 {
   

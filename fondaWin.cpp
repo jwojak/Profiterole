@@ -86,6 +86,7 @@ fondaWin::fondaWin() : QWidget()
   connect(imaLoader, SIGNAL(imageLoadedDone()), imaStatTable, SLOT(updateContent()));
   connect(imaLoader, SIGNAL(imageLoadedDone()), imaHistoDisplayer, SLOT(updateContent()));
   connect(imaLoader, SIGNAL(imageLoadedDone()), imaListSelector, SLOT(updateContent()));
+  
 
   imageMenu->addAction(backToOrigImageAct);
   connect(backToOrigImageAct,SIGNAL(triggered()), this, SLOT(showOrigImage()));
@@ -130,9 +131,19 @@ fondaWin::fondaWin() : QWidget()
   
   connect(signalMapper, SIGNAL(mapped(int)), imageWidget, SLOT(setColorMap(int)));
   //  connect(imManager, SIGNAL(changeOnImageList()), imaListSelector, SLOT(buildListImageSelector()));
-  
+  connect(imaListSelector, SIGNAL(toggled(bool)), this, SLOT(slotatest()));
+
 }
 
+void fondaWin::slotatest()
+{
+  std::cout<<"-------------------------------------------------------------"<<std::endl;
+  std::cout<<"%%                                                         %%"<<std::endl;
+  std::cout<<"%%                 SLOT A TEST PASS                        %%"<<std::endl;
+  std::cout<<"%%                                                         %%"<<std::endl;
+  std::cout<<"-------------------------------------------------------------"<<std::endl;
+    
+}
 
 void fondaWin::openDialogFile()
 {
